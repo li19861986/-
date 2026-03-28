@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחירון קידוס הפקות 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --kidos-yellow:#FFD600;
+  --kidos-orange:#FF9800;
+  --kidos-green:#4CAF50;
+  --kidos-blue:#2196F3;
+  --kidos-red:#F44336;
+  --kidos-pink:#E91E63;
+  --kidos-purple:#9C27B0;
+  --kidos-light-yellow:#FFF9C4;
+  --kidos-light-green:#E8F5E9;
+  --kidos-light-blue:#E3F2FD;
+  --kidos-light-pink:#FCE4EC;
+  --kidos-dark:#333;
+  --kidos-white:#FFFDE7;
+  --radius:16px;
+  --shadow:0 4px 24px rgba(0,0,0,.12);
+}
+body{
+  font-family:'Heebo',sans-serif;
+  background:linear-gradient(135deg,#FFF9C4 0%,#FFECB3 30%,#FFF3E0 60%,#E8F5E9 100%);
+  min-height:100vh;
+  color:var(--kidos-dark);
+  overflow-x:hidden;
+}
+
+/* Confetti dots */
+body::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background-image:
+    radial-gradient(circle 6px,var(--kidos-red) 100%,transparent 100%),
+    radial-gradient(circle 4px,var(--kidos-blue) 100%,transparent 100%),
+    radial-gradient(circle 5px,var(--kidos-green) 100%,transparent 100%),
+    radial-gradient(circle 3px,var(--kidos-yellow) 100%,transparent 100%),
+    radial-gradient(circle 4px,var(--kidos-pink) 100%,transparent 100%),
+    radial-gradient(circle 5px,var(--kidos-orange) 100%,transparent 100%),
+    radial-gradient(circle 3px,var(--kidos-purple) 100%,transparent 100%);
+  background-position:
+    5% 8%, 92% 15%, 15% 85%, 88% 72%, 45% 5%, 70% 90%, 30% 45%;
+  background-size:12px 12px,8px 8px,10px 10px,6px 6px,8px 8px,10px 10px,6px 6px;
+  background-repeat:no-repeat;
+  opacity:.35;
+  pointer-events:none;
+  z-index:0;
+}
+
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding:20px 16px 60px;
+  position:relative;
+  z-index:1;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:30px 20px 20px;
+  margin-bottom:30px;
+  position:relative;
+}
+.header h1{
+  font-family:'Rubik',sans-serif;
+  font-weight:800;
+  font-size:clamp(28px,5vw,48px);
+  color:var(--kidos-dark);
+  text-shadow:3px 3px 0 var(--kidos-yellow);
+  margin-bottom:8px;
+  letter-spacing:-1px;
+}
+.header .sub{
+  font-size:clamp(14px,2.5vw,18px);
+  color:#666;
+  font-weight:400;
+}
+.header .pineapple{
+  font-size:48px;
+  display:inline-block;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* TAB NAV */
+.tab-nav{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:28px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,249,196,.92);
+  backdrop-filter:blur(12px);
+  padding:12px 8px;
+  border-radius:var(--radius);
+}
+.tab-btn{
+  font-family:'Heebo',sans-serif;
+  font-weight:700;
+  font-size:clamp(13px,2vw,16px);
+  padding:10px 20px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.tab-btn::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.3);
+  transform:translateX(100%);
+  transition:transform .3s;
+}
+.tab-btn:hover::after{transform:translateX(0)}
+.tab-btn.active{transform:scale(1.05);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.tab-btn[data-tab="packages"]{background:var(--kidos-yellow);color:#333}
+.tab-btn[data-tab="packages"].active{background:#FFC107;color:#000}
+.tab-btn[data-tab="food"]{background:var(--kidos-orange);color:#fff}
+.tab-btn[data-tab="food"].active{background:#E65100;color:#fff}
+.tab-btn[data-tab="decor"]{background:var(--kidos-green);color:#fff}
+.tab-btn[data-tab="decor"].active{background:#2E7D32;color:#fff}
+.tab-btn[data-tab="inflatables"]{background:var(--kidos-blue);color:#fff}
+.tab-btn[data-tab="inflatables"].active{background:#1565C0;color:#fff}
+.tab-btn[data-tab="misc"]{background:var(--kidos-pink);color:#fff}
+.tab-btn[data-tab="misc"].active{background:#AD1457;color:#fff}
+
+/* TAB CONTENT */
+.tab-content{display:none;animation:fadeUp .4s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* PACKAGE CARDS */
+.packages-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+}
+.pkg-card{
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .3s,box-shadow .3s;
+  cursor:pointer;
+  position:relative;
+}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.pkg-card .card-header{
+  padding:16px 20px;
+  text-align:center;
+  position:relative;
+}
+.pkg-card .card-header h3{
+  font-family:'Rubik',sans-serif;
+  font-weight:800;
+  font-size:22px;
+  margin-bottom:4px;
+}
+.pkg-card .card-header .tagline{
+  font-size:14px;
+  font-weight:700;
+  opacity:.85;
+}
+.pkg-card .price-badge{
+  position:absolute;
+  top:-1px;
+  left:16px;
+  background:var(--kidos-red);
+  color:#fff;
+  font-family:'Rubik',sans-serif;
+  font-weight:800;
+  font-size:18px;
+  padding:6px 14px;
+  border-radius:0 0 12px 12px;
+  box-shadow:0 4px 12px rgba(244,67,54,.3);
+}
+.pkg-card .card-body{
+  background:#fff;
+  padding:16px 20px 20px;
+}
+.pkg-card .card-body ul{
+  list-style:none;
+  padding:0;
+}
+.pkg-card .card-body li{
+  padding:6px 0;
+  font-size:14px;
+  line-height:1.6;
+  border-bottom:1px dashed #eee;
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+}
+.pkg-card .card-body li:last-child{border:none}
+.pkg-card .card-body li .dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px;
+}
+.pkg-card .card-body .meta{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:2px solid #eee;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:13px;
+  color:#666;
+}
+.pkg-card .card-body .meta span{
+  display:flex;align-items:center;gap:4px;
+}
+.pkg-card .upgrade-note{
+  background:#FFF3E0;
+  padding:8px 16px;
+  text-align:center;
+  font-size:13px;
+  font-weight:600;
+  color:var(--kidos-orange);
+}
+.pkg-card .no-upgrade{
+  background:#FFEBEE;
+  padding:8px 16px;
+  text-align:center;
+  font-size:13px;
+  font-weight:600;
+  color:var(--kidos-red);
+}
+
+/* Colors per package */
+.pkg-ktana .card-header{background:linear-gradient(135deg,#FFD600,#FFAB00);color:#333}
+.pkg-ktana .dot{background:#FFD600}
+.pkg-bkef .card-header{background:linear-gradient(135deg,#4CAF50,#2E7D32);color:#fff}
+.pkg-bkef .dot{background:#4CAF50}
+.pkg-bgadol .card-header{background:linear-gradient(135deg,#2196F3,#1565C0);color:#fff}
+.pkg-bgadol .dot{background:#2196F3}
+.pkg-anak .card-header{background:linear-gradient(135deg,#FF9800,#E65100);color:#fff}
+.pkg-anak .dot{background:#FF9800}
+.pkg-concept .card-header{background:linear-gradient(135deg,#9C27B0,#6A1B9A);color:#fff}
+.pkg-concept .dot{background:#9C27B0}
+.pkg-hakol .card-header{background:linear-gradient(135deg,#F44336,#C62828);color:#fff}
+.pkg-hakol .dot{background:#F44336}
+
+/* DETAIL MODAL / EXPAND */
+.pkg-card .card-body{max-height:0;overflow:hidden;padding:0 20px;transition:max-height .5s cubic-bezier(.4,0,.2,1),padding .3s}
+.pkg-card.open .card-body{max-height:600px;padding:16px 20px 20px}
+.pkg-card .expand-hint{
+  text-align:center;padding:10px;font-size:13px;color:#999;
+  background:#fff;transition:all .3s;
+}
+.pkg-card.open .expand-hint{display:none}
+
+/* FOOD / DECOR / MISC TABLES */
+.section-title{
+  font-family:'Rubik',sans-serif;
+  font-weight:800;
+  font-size:24px;
+  text-align:center;
+  margin-bottom:20px;
+  padding:10px 24px;
+  display:inline-block;
+  border-radius:30px;
+  color:#fff;
+}
+.section-title-wrap{text-align:center;margin-bottom:20px}
+
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
+.item-card{
+  background:#fff;
+  border-radius:12px;
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  transition:all .25s;
+  border-right:4px solid transparent;
+}
+.item-card:hover{
+  transform:translateX(-4px);
+  box-shadow:0 4px 16px rgba(0,0,0,.1);
+}
+.item-card .item-name{font-weight:600;font-size:15px;flex:1}
+.item-card .item-price{
+  font-family:'Rubik',sans-serif;
+  font-weight:700;
+  font-size:16px;
+  white-space:nowrap;
+  padding-right:12px;
+}
+.item-card .item-note{font-size:12px;color:#888;display:block}
+
+/* Food cards */
+.food-card{border-right-color:var(--kidos-orange)}
+.food-card .item-price{color:var(--kidos-orange)}
+/* Decor cards */
+.decor-card{border-right-color:var(--kidos-green)}
+.decor-card .item-price{color:var(--kidos-green)}
+/* Inflatable cards */
+.inflate-card{border-right-color:var(--kidos-blue)}
+.inflate-card .item-price{color:var(--kidos-blue)}
+/* Misc cards */
+.misc-card{border-right-color:var(--kidos-pink)}
+.misc-card .item-price{color:var(--kidos-pink)}
+
+/* Sub-section titles */
+.sub-title{
+  font-family:'Rubik',sans-serif;
+  font-weight:700;
+  font-size:18px;
+  margin:24px 0 12px;
+  padding-right:12px;
+  border-right:4px solid;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  margin-top:40px;
+  padding:20px;
+  font-size:13px;
+  color:#888;
+}
+.footer a{color:var(--kidos-blue);text-decoration:none;font-weight:600}
+.footer .extras{
+  margin-top:12px;
+  background:#fff;
+  border-radius:var(--radius);
+  padding:16px 24px;
+  display:inline-block;
+  box-shadow:var(--shadow);
+  font-size:14px;
+  color:#555;
+  font-weight:500;
+}
+.footer .disclaimer{margin-top:16px;font-size:11px;color:#aaa}
+
+/* SEARCH */
+.search-wrap{
+  max-width:400px;
+  margin:0 auto 20px;
+  position:relative;
+}
+.search-wrap input{
+  width:100%;
+  font-family:'Heebo',sans-serif;
+  font-size:16px;
+  padding:12px 20px 12px 44px;
+  border:2px solid #e0e0e0;
+  border-radius:30px;
+  outline:none;
+  background:#fff;
+  transition:border-color .3s;
+}
+.search-wrap input:focus{border-color:var(--kidos-yellow)}
+.search-wrap .search-icon{
+  position:absolute;
+  left:16px;top:50%;transform:translateY(-50%);
+  font-size:18px;color:#999;
+}
+
+/* CTA float */
+.cta-float{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:200;
+  background:linear-gradient(135deg,#4CAF50,#2E7D32);
+  color:#fff;
+  font-family:'Rubik',sans-serif;
+  font-weight:700;
+  font-size:16px;
+  padding:14px 32px;
+  border-radius:40px;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 6px 24px rgba(76,175,80,.4);
+  transition:all .3s;
+  text-decoration:none;
+  display:flex;align-items:center;gap:8px;
+}
+.cta-float:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 8px 32px rgba(76,175,80,.5)}
+
+@media(max-width:600px){
+  .tab-btn{padding:8px 14px;font-size:13px}
+  .packages-grid{grid-template-columns:1fr}
+  .items-grid{grid-template-columns:1fr}
+  .container{padding:12px 10px 80px}
+  .cta-float{font-size:14px;padding:12px 24px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="pineapple">🍍</div>
+  <h1>מחירון קידוס הפקות 2025</h1>
+  <div class="sub">חבילות הפעלה · שדרוגים · דוכני מזון · תפאורות · ועוד</div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="searchInput" placeholder="חפש פריט במחירון..." oninput="filterItems()">
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="packages" onclick="switchTab('packages')">📦 חבילות הפעלה</button>
+  <button class="tab-btn" data-tab="food" onclick="switchTab('food')">🍔 דוכני מזון</button>
+  <button class="tab-btn" data-tab="decor" onclick="switchTab('decor')">🎨 תפאורות</button>
+  <button class="tab-btn" data-tab="inflatables" onclick="switchTab('inflatables')">🏰 מתקנים מתנפחים</button>
+  <button class="tab-btn" data-tab="misc" onclick="switchTab('misc')">✨ שונות</button>
+</div>
+
+<!-- ==================== PACKAGES TAB ==================== -->
+<div class="tab-content active" id="tab-packages">
+<div class="packages-grid">
+
+<!-- קידוס בקטנה -->
+<div class="pkg-card pkg-ktana" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪600</div>
+    <h3>קידוס בקטנה</h3>
+    <div class="tagline">מסיבה קטנה, כל שביל!</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>בובת ענק לבחירה.<br>(למעט בראול סטאר)</li>
+      <li><span class="dot"></span>הרקדה עם הבובה וצילומים</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב</li>
+      <li><span class="dot"></span>פעילות קצרה להעצמה</li>
+      <li><span class="dot"></span>תואמת גיל</li>
+      <li><span class="dot"></span>מייצג עוגה לתפאורה</li>
+      <li><span class="dot"></span>מפעיל מקצועי ומלא שמחה</li>
+      <li><span class="dot"></span>מוזיקה בליווי בידורית</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 20 משתתפים</span>
+      <span>⏱ זמן החבילה חצי שעה</span>
+    </div>
+  </div>
+  <div class="no-upgrade">חבילה זו אינה ניתנת לשדרוג</div>
+</div>
+
+<!-- קידוס בכיף -->
+<div class="pkg-card pkg-bkef" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪1800</div>
+    <h3>קידוס בכיף</h3>
+    <div class="tagline">מינימום הפקה מקסימום שמחה!</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>בובת ענק לבחירה.</li>
+      <li><span class="dot"></span>הרקדה שמחה עם הבובה</li>
+      <li><span class="dot"></span>הפעלה מדליקה לבחירה.<br>(משחקידום, ספורט,ריפוי, משחקים של פעם )</li>
+      <li><span class="dot"></span>מפעיל מקצועי ומלא שמחה</li>
+      <li><span class="dot"></span>רקע צילום וקשת מתנפחת לבחירה</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב</li>
+      <li><span class="dot"></span>מערכת הגברה מקצועית</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 35 משתתפים</span>
+      <span>⏱ זמן חבילה שעה ורבע</span>
+    </div>
+  </div>
+</div>
+
+<!-- קידוס בגדול -->
+<div class="pkg-card pkg-bgadol" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪2000</div>
+    <h3>קידוס בגדול</h3>
+    <div class="tagline">חוויה שלמה ללא פשרות</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>בובת ענק לבחירה.</li>
+      <li><span class="dot"></span>הרקדה שמחה הבובה וצילומים</li>
+      <li><span class="dot"></span>רקע לצילום ו-קשת מתנפחת</li>
+      <li><span class="dot"></span>מפעיל מיומן ומקצועיים</li>
+      <li><span class="dot"></span>מכונת עשן ולדים\מכונת בועות</li>
+      <li><span class="dot"></span>מכונת סוכר או פופקורן לבחירה</li>
+      <li><span class="dot"></span>הפעלה לבחירה</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב והגברה</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 45 משתתפים.</span>
+      <span>⏱ זמן חבילה שעתיים</span>
+    </div>
+  </div>
+</div>
+
+<!-- לחגוג בענק -->
+<div class="pkg-card pkg-anak" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪2500</div>
+    <h3>לחגוג בענק</h3>
+    <div class="tagline">החבילה שכולם שמחים!</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>הפעלה לבחירה 45 דקות</li>
+      <li><span class="dot"></span>בובה לבחירה+ רקע וקשת מתנפחת</li>
+      <li><span class="dot"></span>הרקדה שמחה ומקפיצה</li>
+      <li><span class="dot"></span>מערכת הגברה מקצועית</li>
+      <li><span class="dot"></span>מכונת סוכר + פופקורן</li>
+      <li><span class="dot"></span>דוכן יריד או מתקן קפיצה בינוני<br>מתנפח לבחירה.</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב</li>
+      <li><span class="dot"></span>הזמנה דיגיטלית</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 45 משתתפים</span>
+      <span>⏱ זמן חבילה שעתיים</span>
+    </div>
+  </div>
+  <div class="upgrade-note">הטבת חבילה - חוגג נוסף בעלות ₪100</div>
+</div>
+
+<!-- חגיגת קונספט -->
+<div class="pkg-card pkg-concept" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪2200</div>
+    <h3>חגיגת קונספט</h3>
+    <div class="tagline">חגיגה כמיפגש מושלם וייחודי!</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>בובת ענק לבחירה.</li>
+      <li><span class="dot"></span>הרקדה שמחה עם הבובה</li>
+      <li><span class="dot"></span>רקע לצילום ו-קשת מתנפחת</li>
+      <li><span class="dot"></span>3 במות תצוגה בקונספט ו-שטיח</li>
+      <li><span class="dot"></span>קונספט תואם עוגת מיצג</li>
+      <li><span class="dot"></span>צוות מיומן ומקצועי</li>
+      <li><span class="dot"></span>מכונת עשן ולדים\מכונת בועות</li>
+      <li><span class="dot"></span>מכונת סוכר או פופקורן לבחירה</li>
+      <li><span class="dot"></span>הפעלה לבחירה</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב והגברה</li>
+      <li><span class="dot"></span>הזמנה דיגיטלית</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 45 משתתפים.</span>
+      <span>⏱ זמן חבילה שעתיים</span>
+    </div>
+  </div>
+  <div class="upgrade-note">הטבת חבילה - חוגג נוסף בעלות ₪100</div>
+</div>
+
+<!-- הכל כלול -->
+<div class="pkg-card pkg-hakol" onclick="this.classList.toggle('open')">
+  <div class="card-header">
+    <div class="price-badge">₪3200</div>
+    <h3>הכל כלול</h3>
+    <div class="tagline">החבילה המושלמת!</div>
+  </div>
+  <div class="expand-hint">👆 לחצו לפרטים</div>
+  <div class="card-body">
+    <ul>
+      <li><span class="dot"></span>2 הפעלות משולבות לבחירה</li>
+      <li><span class="dot"></span>תפאורת קונספט מלאה:<br>קשת מתנפחת+רקע צילום+שטיח תואם<br>+3 במות קונספט + עוגת מייצג</li>
+      <li><span class="dot"></span>בובת ענק לבחירה + מכונת עשן ולדים או בועות לבחירה</li>
+      <li><span class="dot"></span>דוכן אוטובוס מתנפח או דוכן כיבוד יריד מרהיב<br>הכוללים בתוכם מכונת סוכר +פופקורן ללא הגבלה,</li>
+      <li><span class="dot"></span>מכונת בועות או מכונת עשן ולדים  לבחירה</li>
+      <li><span class="dot"></span>טקס עוגה מלהיב</li>
+      <li><span class="dot"></span>הזמנה דיגיטלית</li>
+      <li><span class="dot"></span>דוכן נקניקיות \ווופל בלג'יוקרפ לבחירה</li>
+      <li><span class="dot"></span>2 דיספנסרים 8 ליטר שתיה קלה</li>
+    </ul>
+    <div class="meta">
+      <span>👥 מתאים עד 50 משתתפים.</span>
+      <span>⏱ זמן חבילה שעתיים</span>
+    </div>
+  </div>
+  <div class="upgrade-note" style="background:#E8F5E9;color:#2E7D32">הטבת חבילה חוגג נוסף ללא עלות</div>
+</div>
+
+</div>
+</div>
+
+<!-- ==================== FOOD TAB ==================== -->
+<div class="tab-content" id="tab-food">
+<div class="section-title-wrap">
+  <span class="section-title" style="background:linear-gradient(135deg,var(--kidos-orange),#E65100)">🍔 דוכני מזון</span>
+</div>
+<div class="items-grid" id="food-grid">
+
+  <div class="item-card food-card" data-search="דוכן פופקורן"><span class="item-name">דוכן פופקורן</span><span class="item-price">₪300</span></div>
+  <div class="item-card food-card" data-search="דוכן מכונת סוכר"><span class="item-name">דוכן מכונת סוכר</span><span class="item-price">₪300</span></div>
+  <div class="item-card food-card" data-search="דוכן קרפ צרפתי"><span class="item-name">דוכן קרפ צרפתי</span><span class="item-price">₪600</span></div>
+  <div class="item-card food-card" data-search="דוכן וופל בלגי"><span class="item-name">דוכן וופל בלגי</span><span class="item-price">₪600</span></div>
+  <div class="item-card food-card" data-search="דוכן פלאפל ותוספות"><span class="item-name">דוכן פלאפל ותוספות</span><span class="item-price">₪800</span></div>
+  <div class="item-card food-card" data-search="דוכן שניצלונים וצ'יפס"><span class="item-name">דוכן שניצלונים וצ'יפס</span><span class="item-price">₪800</span></div>
+  <div class="item-card food-card" data-search="דוכן נקניקיות בלחמניה"><span class="item-name">דוכן נקניקיות בלחמניה</span><span class="item-price">₪550</span></div>
+  <div class="item-card food-card" data-search="דוכן המבורגר צ'יפס"><span class="item-name">דוכן המבורגר ,צ'יפס,</span><span class="item-price">₪1000</span></div>
+  <div class="item-card food-card" data-search="טאבון פיצות ופוקאצ'ות"><span class="item-name">טאבון פיצות ופוקאצ'ות<span class="item-note">(ללא הגבלה)</span></span><span class="item-price">₪1500</span></div>
+  <div class="item-card food-card" data-search="תוספת ציפס"><span class="item-name">תוספת צ'יפס</span><span class="item-price">₪300</span></div>
+  <div class="item-card food-card" data-search="דוכן תירס חם קלאסי"><span class="item-name">דוכן תירס חם קלאסי</span><span class="item-price">₪550</span></div>
+  <div class="item-card food-card" data-search="דוכן גרעיני תירס בחמאה"><span class="item-name">דוכן גרעיני תירס בחמאה</span><span class="item-price">₪550</span></div>
+  <div class="item-card food-card" data-search="מפל שוקולד חם"><span class="item-name">מפל שוקולד חם</span><span class="item-price">₪350</span></div>
+  <div class="item-card food-card" data-search="שתיה קרה 2 דיספנסרים"><span class="item-name">שתיה קרה 2 דיספנסרים<span class="item-note">סה"כ 16 ליטר (ענבים, תפוזים, לימונענע, אשכוליות)</span></span><span class="item-price">₪250</span></div>
+  <div class="item-card food-card" data-search="דוכן שייק פירות"><span class="item-name">דוכן שייק פירות</span><span class="item-price">₪700</span></div>
+  <div class="item-card food-card" data-search="אוטובוס מתוק"><span class="item-name">אוטובוס מתוק הכולל:<span class="item-note">מכונת סוכר ו- פופקורן<br>וופל בלגי או-קרפ<br>עמדת מיצים 2 סוגים</span></span><span class="item-price">₪1400</span></div>
+
+</div>
+<p style="text-align:center;margin-top:16px;font-size:13px;color:#888">כלל הדוכנים כוללים את כל הציוד הנדרש ותפעול מלא</p>
+</div>
+
+<!-- ==================== DECOR TAB ==================== -->
+<div class="tab-content" id="tab-decor">
+<div class="section-title-wrap">
+  <span class="section-title" style="background:linear-gradient(135deg,var(--kidos-green),#2E7D32)">🎨 תפאורות</span>
+</div>
+<div class="items-grid" id="decor-grid">
+
+  <div class="item-card decor-card" data-search="בובת דנסר 8 מטר אוויר"><span class="item-name">בובת דנסר 8 מטר,אוויר</span><span class="item-price">₪200</span></div>
+  <div class="item-card decor-card" data-search="במות תצוגה 3"><span class="item-name">במות תצוגה( 3)</span><span class="item-price">₪300</span></div>
+  <div class="item-card decor-card" data-search="דמויות מייצג"><span class="item-name">דמויות מייצג<span class="item-note">החל מ-</span></span><span class="item-price">₪100</span></div>
+  <div class="item-card decor-card" data-search="סט תפאורת קונספט"><span class="item-name">סט תפאורת קונספט:<span class="item-note">3 במות , שטיח , רקע, קשת</span></span><span class="item-price">₪800</span></div>
+  <div class="item-card decor-card" data-search="תוספת רקע"><span class="item-name">תוספת רקע</span><span class="item-price">₪150</span></div>
+  <div class="item-card decor-card" data-search="קשת מתנפחת"><span class="item-name">קשת מתנפחת<span class="item-note">ניתן לבחור מהמגוון המופיע באתר<br>אפשרות להשכרה</span></span><span class="item-price">₪200</span></div>
+
+</div>
+</div>
+
+<!-- ==================== INFLATABLES TAB ==================== -->
+<div class="tab-content" id="tab-inflatables">
+<div class="section-title-wrap">
+  <span class="section-title" style="background:linear-gradient(135deg,var(--kidos-blue),#1565C0)">🏰 מתקנים מתנפחים</span>
+</div>
+<div class="items-grid" id="inflate-grid">
+
+  <div class="item-card inflate-card" data-search="מתקן קפיצה קטן"><span class="item-name">מתקן קפיצה קטן</span><span class="item-price">₪350</span></div>
+  <div class="item-card inflate-card" data-search="מתקן קפיצה בינוני"><span class="item-name">מתקן קפיצה בינוני<span class="item-note">מ-</span></span><span class="item-price">₪550</span></div>
+  <div class="item-card inflate-card" data-search="מתקן קפיצה גדול"><span class="item-name">מתקן קפיצה גדול<span class="item-note">מ-</span></span><span class="item-price">₪650</span></div>
+  <div class="item-card inflate-card" data-search="דוכן יריד בודד"><span class="item-name">דוכן יריד בודד<span class="item-note">מ-</span></span><span class="item-price">₪250</span></div>
+  <div class="item-card inflate-card" data-search="דוכני יריד משולבים"><span class="item-name">דוכני יריד משולבים<span class="item-note">מ-</span></span><span class="item-price">₪450</span></div>
+  <div class="item-card inflate-card" data-search="מתנפחי מים"><span class="item-name">מתנפחי מים<span class="item-note">מ-</span></span><span class="item-price">₪450</span></div>
+
+</div>
+<p style="text-align:center;margin-top:16px;font-size:13px;color:#888">ניתן לבחור מהמגוון המופיע באתר · אפשרות להשכרה</p>
+</div>
+
+<!-- ==================== MISC TAB ==================== -->
+<div class="tab-content" id="tab-misc">
+<div class="section-title-wrap">
+  <span class="section-title" style="background:linear-gradient(135deg,var(--kidos-pink),#AD1457)">✨ שונות</span>
+</div>
+<div class="items-grid" id="misc-grid">
+
+  <div class="item-card misc-card" data-search="תוספת חוגג נוסף"><span class="item-name">תוספת חוגג נוסף</span><span class="item-price">₪200</span></div>
+  <div class="item-card misc-card" data-search="תוסף בובת ענק"><span class="item-name">תוסף בובת ענק</span><span class="item-price">₪150</span></div>
+  <div class="item-card misc-card" data-search="מעמד חבלי הפרדה"><span class="item-name">מעמד חבלי הפרדה</span><span class="item-price">₪100</span></div>
+  <div class="item-card misc-card" data-search="זיקוקים קרים 4"><span class="item-name">זיקוקים קרים 4</span><span class="item-price">₪900</span></div>
+  <div class="item-card misc-card" data-search="תותח קצף"><span class="item-name">תותח קצף</span><span class="item-price">₪800</span></div>
+  <div class="item-card misc-card" data-search="גשר תאורה מתחלפת"><span class="item-name">גשר תאורה מתחלפת</span><span class="item-price">₪500</span></div>
+  <div class="item-card misc-card" data-search="מעמד חבלי הפרדה"><span class="item-name">מעמד חבלי הפרדה</span><span class="item-price">₪100</span></div>
+  <div class="item-card misc-card" data-search="מכונת בועות מקצועית"><span class="item-name">מכונת בועות מקצועית</span><span class="item-price">₪300</span></div>
+  <div class="item-card misc-card" data-search="בלוני הליום חלקים כולל מילוי"><span class="item-name">בלוני הליום חלקים כולל מילוי<span class="item-note">{30 בלונים}</span></span><span class="item-price">₪350</span></div>
+  <div class="item-card misc-card" data-search="מכונת עשן כבד קרח יבש"><span class="item-name">מכונת עשן כבד( קרח יבש)</span><span class="item-price">₪700</span></div>
+  <div class="item-card misc-card" data-search="שטיח לעיצוב אירוע"><span class="item-name">שטיח לעיצוב אירוע</span><span class="item-price">₪100</span></div>
+  <div class="item-card misc-card" data-search="מעמדי ספרות פרחים גיל 13 12"><span class="item-name">מעמדי ספרות פרחים גיל 13/12</span><span class="item-price">₪250</span></div>
+
+</div>
+
+<div class="sub-title" style="border-color:var(--kidos-pink);color:var(--kidos-pink);margin-top:32px">חבילת פירוטכניקה לאירוע</div>
+<div class="items-grid">
+  <div class="item-card misc-card" data-search="זיקוקים עשן כבד בועות סבון חבילת פירוטכניקה"><span class="item-name">זיקוקים+ עשן כבד+בועות סבון</span><span class="item-price">₪1600</span></div>
+</div>
+
+<div class="sub-title" style="border-color:var(--kidos-purple);color:var(--kidos-purple);margin-top:32px">בנוסף ניתן להזמין</div>
+<p style="font-size:15px;line-height:2;padding:8px 12px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+  שופרת | מתופפים | בר מצווה | חאלקה | עליה לתורה | הכנסת ספר תורה | רכב שמחות | ועוד...
+</p>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="extras">ניתן להרכיב חבילות גם בהתאמה אישית 🎉</div>
+  <div class="disclaimer">
+    ט.ל.ח ***כל הזכויות שמורות*** החברה רשאית להפסיק את המבצע בכל עת.<br>
+    <a href="https://www.kidos2.com" target="_blank">www.kidos2.com</a>
+  </div>
+</div>
+
+</div>
+
+<!-- CTA -->
+<a class="cta-float" href="https://www.kidos2.com" target="_blank">
+  🎉 להזמנה עכשיו
+</a>
+
+<script>
+function switchTab(tab){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
+  document.getElementById('searchInput').value='';
+  filterItems();
+}
+
+function filterItems(){
+  const q=document.getElementById('searchInput').value.trim();
+  // filter item-cards
+  document.querySelectorAll('.item-card').forEach(card=>{
+    const text=(card.getAttribute('data-search')||'')+' '+(card.textContent||'');
+    card.style.display=(!q||text.includes(q))?'':'none';
+  });
+  // filter package cards
+  document.querySelectorAll('.pkg-card').forEach(card=>{
+    const text=card.textContent||'';
+    card.style.display=(!q||text.includes(q))?'':'none';
+  });
+}
+</script>
+
+</body>
+</html>
