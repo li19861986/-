@@ -1,0 +1,14 @@
+<!-- @dsCard group="Content" height=240 -->
+<!doctype html>
+<html lang="he" dir="rtl">
+<head><meta charset="utf-8"><title>preview</title>
+<style>body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body)} #root{padding:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var K = window.Kidos, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{width:'100%',maxWidth:520}},h(K.PriceRow,{name:'דוכן פופקורן',price:300}),h(K.PriceRow,{name:'דוכן וופל בלגי',price:600}),h(K.PriceRow,{name:'שתיה קרה, 2 דיספנסרים',note:'16 ליטר: ענבים, תפוזים, לימונענע, אשכוליות',price:250}),h(K.PriceRow,{name:'טאבון פיצות ופוקאצ׳ות',note:'ללא הגבלה',price:1500})));
+</script>
+</body>
+</html>

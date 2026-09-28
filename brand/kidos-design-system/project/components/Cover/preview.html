@@ -1,0 +1,55 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>קידוס</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--ground); color:var(--ink); font-family:var(--font-body); overflow:hidden; }
+  .cover { position:relative; width:960px; height:288px; overflow:hidden; }
+  /* RTL: the name sits bottom-right, the art in the left 480px box */
+  .art { position:absolute; top:0; left:0; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .blue { fill:var(--blue); }
+  .pink-ring { fill:none; stroke:var(--pink); stroke-width:24px; }
+  .white-ring { fill:none; stroke:var(--surface); stroke-width:6px; }
+  .navy-line { fill:none; stroke:var(--outline); stroke-width:3px; }
+  .lime { fill:var(--lime); }
+  .sun { fill:var(--sun); }
+  .deep { fill:var(--ink); }
+  .spark-p { fill:var(--pink); } .spark-l { fill:var(--lime); } .spark-s { fill:var(--sky); }
+  .words { position:absolute; right:var(--space-8); bottom:var(--space-8); max-width:440px; text-align:right; }
+  .name { margin:0; font-family:var(--font-display); font-size:120px; line-height:.92; font-weight:700; color:var(--ink); }
+  .tag { margin:var(--space-2) 0 0; font-size:14px; line-height:20px; color:var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      blue disc r160 bled off the top-left (the logo's disc, largest) · lime pill 208x96 (outer ring) · ink tall pill 64x208 (the navy outline; inverts to near-white in dark) · sun disc r24 (the star, small) — about 40% of 960x288
+  arrangement one big disc with satellites, mirrored for RTL so the art sits left of the right-aligned name
+  pattern     concentric rings — "the sticker edge": pink ring (space-6 wide), white ring (stroke-ring), navy line (stroke-outline) around the disc; plus the three spark ticks (space-8 x space-2 pills) from the slogan ribbon
+  scales      ring widths space-6 / stroke-ring / stroke-outline; pill rx = radius-pill (half the short side); gaps space-4 and space-6
+-->
+<circle class="blue" cx="120" cy="36" r="160"/>
+<circle class="pink-ring" cx="120" cy="36" r="172"/>
+<circle class="white-ring" cx="120" cy="36" r="187"/>
+<circle class="navy-line" cx="120" cy="36" r="191.5"/>
+<rect class="lime" x="200" y="176" width="208" height="96" rx="48"/>
+<rect class="deep" x="416" y="48" width="64" height="208" rx="32"/>
+<circle class="sun" cx="352" cy="96" r="24"/>
+<rect class="spark-p" x="300" y="26" width="32" height="8" rx="4" transform="rotate(-35 316 30)"/>
+<rect class="spark-l" x="276" y="46" width="32" height="8" rx="4"/>
+<rect class="spark-s" x="286" y="68" width="32" height="8" rx="4" transform="rotate(35 302 72)"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">קידוס</h1>
+<p class="tag">אירועים שלא שוכחים! מערכת העיצוב של קידוס הפקות.</p>
+</div>
+</div>
+</body>
+</html>

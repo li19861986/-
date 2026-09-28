@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap");
+
+.kd-btn, .kd-badge, .kd-ribbon, .kd-phone, .kd-tab, .kd-pkg, .kd-row, .kd-colorhead { box-sizing: border-box; }
+.kd-btn:focus-visible, .kd-tab:focus-visible, .kd-phone:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Button: candy = pink sticker with navy drop */
+.kd-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); border: var(--stroke-outline) solid var(--outline); border-radius: var(--radius-pill); font-family: var(--font-display); font-weight: 700; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+.kd-btn-l { font-size: 20px; line-height: 24px; padding: var(--space-3) var(--space-8); }
+.kd-btn-s { font-size: 16px; line-height: 20px; padding: var(--space-2) var(--space-6); }
+.kd-btn-candy { background: var(--pink); color: var(--on-pink); box-shadow: var(--shadow-candy); }
+.kd-btn-candy.kd-btn-s { background: var(--pink-deep); }
+.kd-btn-blue { background: var(--blue); color: var(--on-blue); box-shadow: var(--shadow-candy); }
+.kd-btn-candy:hover, .kd-btn-blue:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--outline); }
+.kd-btn-candy:active, .kd-btn-blue:active { transform: translateY(4px); box-shadow: none; }
+.kd-btn-quiet { background: transparent; border-color: transparent; color: var(--link); text-decoration: underline; text-underline-offset: 4px; }
+.kd-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Badge */
+.kd-badge { display: inline-flex; align-items: center; gap: var(--space-1); font-family: var(--font-body); font-size: 14px; line-height: 20px; font-weight: 600; padding: 4px var(--space-3); border-radius: var(--radius-pill); }
+.kd-badge-lime { background: var(--lime); color: var(--on-lime); }
+.kd-badge-sky { background: var(--surface-sunk); color: var(--ink); box-shadow: inset 0 0 0 2px var(--sky); }
+.kd-badge-sun { background: var(--sun); color: var(--on-lime); }
+.kd-badge-pink { background: var(--pink-deep); color: var(--on-blue); }
+.kd-badge-neutral { background: var(--surface-sunk); color: var(--ink-muted); }
+
+/* Slogan ribbon + sparks */
+.kd-ribbon-wrap { display: inline-flex; align-items: center; gap: var(--space-3); }
+.kd-ribbon { display: inline-block; background: var(--ribbon); color: #ffffff; font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 30px; padding: var(--space-2) var(--space-8); border-radius: var(--radius-pill); box-shadow: 0 0 0 3px var(--surface), 0 0 0 6px var(--outline); }
+.kd-sparks { position: relative; display: inline-block; width: 22px; height: 30px; flex: none; }
+.kd-spark { position: absolute; display: block; width: 14px; height: 5px; border-radius: var(--radius-pill); }
+.kd-spark-a { background: var(--pink); top: 2px; left: 4px; transform: rotate(-35deg); }
+.kd-spark-b { background: var(--lime); top: 13px; left: 0; width: 18px; }
+.kd-spark-c { background: var(--sky); top: 24px; left: 4px; transform: rotate(35deg); }
+.kd-sparks-end { transform: scaleX(-1); }
+
+/* Phone pill */
+.kd-phone { display: inline-flex; align-items: center; gap: var(--space-3); background: var(--surface); color: var(--ink); text-decoration: none; border: var(--stroke-outline) solid var(--outline); border-radius: var(--radius-pill); padding-block: 6px; padding-inline-start: 6px; padding-inline-end: var(--space-6); font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 30px; font-variant-numeric: tabular-nums; }
+.kd-phone-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--pink-deep); color: var(--on-blue); }
+
+/* Multicolour headline */
+.kd-colorhead { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 72px; line-height: 1; -webkit-text-stroke: 3px var(--outline); paint-order: stroke fill; letter-spacing: .01em; }
+.kd-ch-blue { color: var(--sky); } .kd-ch-pink { color: var(--pink); } .kd-ch-lime { color: var(--lime); }
+
+/* Sticker frame */
+.kd-sticker { display: inline-grid; place-items: center; overflow: hidden; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sticker); border: 8px solid var(--pink); box-sizing: border-box; }
+.kd-sticker-lime { border-color: var(--lime); } .kd-sticker-blue { border-color: var(--blue); }
+.kd-sticker img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Tabs */
+.kd-tabs { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: var(--space-2); background: var(--surface); border-radius: var(--radius-pill); box-shadow: var(--shadow-lift); }
+.kd-tab { font-family: var(--font-body); font-size: 16px; line-height: 20px; font-weight: 600; color: var(--ink-muted); background: transparent; border: 0; border-radius: var(--radius-pill); padding: 10px var(--space-4); cursor: pointer; }
+.kd-tab:hover { background: var(--surface-sunk); color: var(--ink); }
+.kd-tab-on, .kd-tab-on:hover { background: var(--blue); color: var(--on-blue); }
+
+/* Package card */
+.kd-pkg { position: relative; display: flex; flex-direction: column; gap: var(--space-4); background: var(--surface); color: var(--ink); border-radius: var(--radius-l); padding: var(--space-6); font-family: var(--font-body); border: 2px solid var(--surface-sunk); transition: box-shadow .15s ease, transform .15s ease; }
+.kd-pkg:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+.kd-pkg-featured { border: var(--stroke-outline) solid var(--outline); box-shadow: 0 6px 0 var(--outline); }
+.kd-pkg-flag { position: absolute; top: -16px; inset-inline-start: var(--space-6); background: var(--sun); color: var(--on-lime); font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 20px; padding: 6px var(--space-4); border-radius: var(--radius-pill); border: var(--stroke-outline) solid var(--outline); }
+.kd-pkg-head { display: grid; gap: var(--space-1); }
+.kd-pkg-name { margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600; }
+.kd-pkg-tag { margin: 0; font-size: 17px; line-height: 26px; font-weight: 500; color: var(--ink-muted); }
+.kd-pkg-price { margin: var(--space-2) 0 0; font-family: var(--font-display); font-size: 44px; line-height: 48px; font-weight: 700; color: var(--pink-deep); font-variant-numeric: tabular-nums; }
+.kd-pkg-list { list-style: none; margin: 0; padding: var(--space-4); display: grid; gap: var(--space-2); background: var(--surface-sunk); border-radius: var(--radius-s); font-size: 16px; line-height: 24px; }
+.kd-pkg-list li { display: flex; gap: var(--space-2); align-items: flex-start; }
+.kd-tick { flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%; background: var(--lime); position: relative; }
+.kd-tick::after { content: ""; position: absolute; left: 6px; top: 3px; width: 5px; height: 10px; border: solid var(--on-lime); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+.kd-pkg-meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.kd-pkg-perk { margin: 0; background: var(--peach); color: var(--on-lime); font-size: 15px; line-height: 22px; font-weight: 600; padding: var(--space-2) var(--space-3); border-radius: var(--radius-s); }
+.kd-pkg-note { margin: 0; font-size: 15px; line-height: 24px; color: var(--ink-muted); }
+.kd-pkg-cta { margin-top: auto; width: 100%; }
+
+/* Price row */
+.kd-row { display: flex; align-items: baseline; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 2px dashed var(--surface-sunk); font-family: var(--font-body); color: var(--ink); }
+.kd-row-text { display: grid; }
+.kd-row-name { font-size: 17px; line-height: 26px; font-weight: 600; }
+.kd-row-note { font-size: 15px; line-height: 22px; color: var(--ink-muted); }
+.kd-row-dots { flex: 1; }
+.kd-row-price { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 28px; color: var(--pink-deep); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) { .kd-btn, .kd-pkg { transition: none; } }

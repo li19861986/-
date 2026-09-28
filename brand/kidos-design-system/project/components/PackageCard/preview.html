@@ -1,0 +1,14 @@
+<!-- @dsCard group="Content" height=720 -->
+<!doctype html>
+<html lang="he" dir="rtl">
+<head><meta charset="utf-8"><title>preview</title>
+<style>body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body)} #root{padding:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var K = window.Kidos, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:24,width:'100%',paddingTop:16}},h(K.PackageCard,{name:'קידוס בכיף',tagline:'מינימום הפקה, מקסימום שמחה!',price:1800,features:['בובת ענק לבחירה והרקדה שמחה','הפעלה לבחירה: משחקידום, ספורט, משחקים של פעם','רקע צילום וקשת מתנפחת לבחירה','טקס עוגה מלהיב ומערכת הגברה'],participants:35,duration:'שעה ורבע'}),h(K.PackageCard,{name:'לחגוג בענק',tagline:'החבילה שכולם שמחים!',price:2500,featured:true,features:['הפעלה לבחירה, 45 דקות','בובה לבחירה, רקע וקשת מתנפחת','מכונת סוכר ופופקורן','מתנפח לבחירה והזמנה דיגיטלית'],participants:45,duration:'שעתיים',perk:'הטבת חבילה: חוגג נוסף בעלות ₪100',action:'להזמנת החבילה'})));
+</script>
+</body>
+</html>
