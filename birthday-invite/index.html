@@ -38,7 +38,7 @@ html,body{margin:0;min-height:100%}
 
 /* card */
 .wrap{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;padding:28px 16px 40px}
-.card{width:100%;max-width:420px;background:var(--card);border:6px solid var(--accent);border-radius:28px;padding:22px 18px 24px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.22);animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.card{width:100%;max-width:420px;background:var(--card);border:6px solid var(--accent);border-radius:28px;padding:22px 18px 24px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.22)}
 .photo{display:block;width:200px;height:200px;margin:0 auto;border-radius:50%;border:8px solid #fff;object-fit:cover;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.18)}
 .photo-ph{display:flex;align-items:center;justify-content:center;font-size:90px;background:#fff}
 .subtitle{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;padding:6px 18px;border-radius:999px}
@@ -71,6 +71,27 @@ html,body{margin:0;min-height:100%}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
 .kidos-foot{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;font-weight:700;color:var(--navy);font-size:15px}
 .kidos-foot img{width:64px;height:64px}
+
+/* ===== Interactive effects ===== */
+.card .photo-wrap{position:relative;width:200px;margin:0 auto}
+.card .photo{cursor:pointer;animation:hop 2.6s ease-in-out infinite}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-10px) rotate(-3deg)}50%{transform:translateY(0) rotate(2deg)}75%{transform:translateY(-5px) rotate(-1deg)}}
+.photo.jump{animation:jump .8s cubic-bezier(.3,1.5,.5,1)}
+@keyframes jump{0%{transform:scale(1)}30%{transform:scale(.88,1.12)}55%{transform:scale(1.08,.94) translateY(-80px)}75%{transform:translateY(-24px)}100%{transform:translateY(0) scale(1)}}
+.cover.pop .photo{animation:coverpop .75s cubic-bezier(.4,0,.6,1) forwards}
+@keyframes coverpop{0%{transform:scale(1)}35%{transform:scale(1.25) translateY(-30px) rotate(-6deg)}100%{transform:scale(.3) translateY(-260px) rotate(20deg);opacity:0}}
+.inv.opened .card{animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.name span{display:inline-block;white-space:pre}
+.inv.opened .name span{animation:letter .6s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--i) * 70ms + .35s)}
+@keyframes letter{from{transform:translateY(-36px) scale(.3);opacity:0}to{transform:none;opacity:1}}
+.inv.opened .details li{animation:slidein .5s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i) * 120ms + .7s)}
+@keyframes slidein{from{transform:translateX(70px);opacity:0}to{transform:none;opacity:1}}
+.sparkle{position:absolute;font-size:22px;pointer-events:none;z-index:3;animation:twinkle 1.8s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(.5) rotate(0);opacity:.3}50%{transform:scale(1.15) rotate(20deg);opacity:1}}
+.countdown{display:inline-block;margin:6px 0 4px;background:var(--accent);color:#fff;font-weight:900;font-size:18px;padding:8px 18px;border-radius:999px;animation:bounce 1.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.burst{position:absolute;width:10px;height:10px;border-radius:2px;pointer-events:none;z-index:30;animation:burst .9s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(540deg);opacity:0}}
 </style>
 
 <!-- ===== Editor styles ===== -->
@@ -329,6 +350,7 @@ function renderInvite(root, cfg, opts = {}) {
   const t = THEMES[key];
   const vars = `--bg1:${t.bg1};--bg2:${t.bg2};--card:${t.card};--accent:${t.accent};--ink:${t.ink};--lime:#b6e01e;--navy:#0b2a6b;--pink:#ff1f7a;--blue:#1e90ff;--yellow:#ffd60a`;
   const isKidos = key === 'kidos';
+  const countdown = daysUntil(cfg.date);
   const logo = isKidos ? `<img class="kidos-logo" src="${KIDOS_LOGO}" alt="קידוס הפקות">` : '';
   const foot = isKidos ? `<div class="kidos-foot"><img src="${KIDOS_LOGO}" alt=""><span>הזמנה מבית קידוס הפקות</span></div>` : '';
   const photo = cfg.photo ? `<img class="photo" src="${cfg.photo}" alt="">` : `<div class="photo photo-ph">🎂</div>`;
@@ -338,7 +360,7 @@ function renderInvite(root, cfg, opts = {}) {
   if (cfg.place) items.push(['📍', cfg.place]);
 
   root.innerHTML = `
-    <div class="inv theme-${key}${opts.open ? ' opened' : ''}" dir="rtl" style="${vars}">
+    <div class="inv theme-${key}${opts.open ? ' opened' : ''}" data-key="${key}" dir="rtl" style="${vars}">
       <div class="rays"></div>
       <div class="deco">${decoHTML(t)}</div>
       <div class="confetti">${confettiHTML(t)}</div>
@@ -351,11 +373,12 @@ function renderInvite(root, cfg, opts = {}) {
       </div>
       <div class="wrap">
         <div class="card">
-          ${photo}
+          <div class="photo-wrap">${photo}<span class="sparkle" style="top:-8px;left:-10px">✨</span><span class="sparkle" style="top:14px;right:-12px;animation-delay:.5s">⭐</span><span class="sparkle" style="bottom:6px;left:-6px;animation-delay:1s">✨</span></div>
           <div class="subtitle">${esc(cfg.subtitle)}</div>
-          <div class="name">${esc(cfg.name)}</div>
+          <div class="name">${[...cfg.name].map((c, k) => `<span style="--i:${k}">${esc(c)}</span>`).join('')}</div>
           ${cfg.age !== '' && cfg.age != null ? `<div class="age">${esc(cfg.age)}</div><div class="age-label">${cfg.age == 1 ? 'שנה!' : 'שנים!'}</div>` : ''}
-          ${items.length ? `<ul class="details">${items.map(([i, v]) => `<li><span class="ic">${i}</span><span>${esc(v)}</span></li>`).join('')}</ul>` : ''}
+          ${countdown ? `<div class="countdown">⏳ ${countdown}</div>` : ''}
+          ${items.length ? `<ul class="details">${items.map(([i, v], k) => `<li style="--i:${k}"><span class="ic">${i}</span><span>${esc(v)}</span></li>`).join('')}</ul>` : ''}
           ${cfg.message ? `<p class="message">${esc(cfg.message)}</p>` : ''}
           ${cfg.rsvp ? `<div class="rsvp">לאישור הגעה: ${esc(cfg.rsvp)}</div>` : ''}
           ${foot}
@@ -370,12 +393,60 @@ function renderInvite(root, cfg, opts = {}) {
   currentPlayer = player;
 
   musicBtn.onclick = () => (player.playing ? player.stop() : player.play());
-  inv.querySelector('.open-btn').onclick = () => {
+  inv.querySelector('.open-btn').onclick = e => {
+    const b = e.currentTarget.getBoundingClientRect();
     inv.classList.add('opened');
-    cover.classList.add('hide');
+    cover.classList.add('pop');
+    setTimeout(() => cover.classList.add('hide'), 450);
     if (opts.onOpen) opts.onOpen();
     player.play();
+    burst(root, b.left + b.width / 2, b.top + b.height / 2, 34);
+    vibrate([60, 40, 120]);
   };
+  const cardPhoto = inv.querySelector('.card .photo');
+  cardPhoto.onclick = () => {
+    cardPhoto.classList.remove('jump');
+    void cardPhoto.offsetWidth;
+    cardPhoto.classList.add('jump');
+    const r = cardPhoto.getBoundingClientRect();
+    burst(root, r.left + r.width / 2, r.top + r.height / 2, 22);
+    vibrate(30);
+  };
+}
+
+function daysUntil(v) {
+  if (!v) return '';
+  const [y, m, d] = String(v).split('-').map(Number);
+  if (!y || !m || !d) return '';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff = Math.round((new Date(y, m - 1, d) - today) / 864e5);
+  if (diff > 0) return `נשארו ${diff} ימים!`;
+  if (diff === 0) return 'היום!';
+  return '';
+}
+
+function burst(root, x, y, count = 26) {
+  const inv = root.querySelector('.inv');
+  if (!inv) return;
+  const box = inv.getBoundingClientRect();
+  const colors = (THEMES[inv.dataset.key] || THEMES.adventure).confetti;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('span');
+    const a = Math.random() * Math.PI * 2, d = rnd(70, 170);
+    p.className = 'burst';
+    p.style.left = (x - box.left) + 'px';
+    p.style.top = (y - box.top) + 'px';
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty('--dx', Math.cos(a) * d + 'px');
+    p.style.setProperty('--dy', Math.sin(a) * d + 'px');
+    inv.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+function vibrate(pattern) {
+  try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) {}
 }
 
 function safeJson(obj) {
