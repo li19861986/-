@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחולל הזמנות ליום הולדת</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Rubik:wght@500;700;900&display=swap" rel="stylesheet">
+
+<!-- ===== Invitation styles (also embedded in the downloaded file) ===== -->
+<style id="invite-css">
+html,body{margin:0;min-height:100%}
+.inv{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;font-family:'Heebo',sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));box-sizing:border-box}
+.inv *{box-sizing:border-box}
+
+/* decorations */
+.deco,.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.deco span{position:absolute;bottom:-80px;left:var(--x);font-size:var(--s);opacity:.85;animation:rise var(--d) linear var(--t) infinite}
+.confetti span{position:absolute;top:-24px;left:var(--x);width:9px;height:15px;border-radius:2px;background:var(--c);animation:fall var(--d) linear var(--t) infinite}
+.confetti span:nth-child(3n){width:11px;height:11px;border-radius:50%}
+.inv:not(.opened) .confetti{display:none}
+@keyframes rise{to{transform:translateY(-125vh) rotate(var(--r,0deg))}}
+@keyframes fall{from{transform:translateY(0) rotate(0)}to{transform:translateY(125vh) rotate(720deg)}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+/* opening cover */
+.cover{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;background:linear-gradient(160deg,var(--bg1),var(--bg2));transition:opacity .6s,visibility .6s}
+.cover.hide{opacity:0;visibility:hidden;pointer-events:none}
+.cover h2{margin:0;font:900 30px 'Rubik',sans-serif;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.25);line-height:1.25}
+.cover .photo{width:170px;height:170px}
+.open-btn{font:700 20px 'Heebo',sans-serif;border:0;border-radius:999px;padding:14px 30px;background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.2);animation:pulse 1.6s ease-in-out infinite}
+.open-btn:active{transform:translateY(3px)}
+
+/* music toggle (visible after opening) */
+.music-btn{position:absolute;top:12px;left:12px;z-index:20;width:50px;height:50px;border:0;border-radius:50%;background:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:opacity .2s}
+.music-btn.off{opacity:.45}
+.inv:not(.opened) .music-btn{display:none}
+
+/* card */
+.wrap{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;padding:28px 16px 40px}
+.card{width:100%;max-width:420px;background:var(--card);border:6px solid var(--accent);border-radius:28px;padding:22px 18px 24px;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.22);animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.photo{display:block;width:200px;height:200px;margin:0 auto;border-radius:50%;border:8px solid #fff;object-fit:cover;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.photo-ph{display:flex;align-items:center;justify-content:center;font-size:90px;background:#fff}
+.subtitle{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;padding:6px 18px;border-radius:999px}
+.name{font:900 46px/1.1 'Rubik',sans-serif;color:var(--accent);margin:12px 0 4px;word-break:break-word;text-shadow:0 2px 0 #fff}
+.age{position:relative;display:inline-flex;align-items:center;justify-content:center;width:96px;height:96px;margin:14px auto 2px;border-radius:50%;background:var(--accent);color:#fff;font:900 52px 'Rubik',sans-serif;box-shadow:0 6px 0 rgba(0,0,0,.18)}
+.age::before{content:'👑';position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:30px}
+.age-label{font-weight:700;font-size:16px;margin-bottom:6px}
+.details{list-style:none;margin:14px 0 8px;padding:0;display:grid;gap:8px}
+.details li{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;font-weight:700;font-size:17px;box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.details .ic{font-size:22px}
+.message{font-size:18px;font-weight:500;margin:12px 0 4px;line-height:1.5}
+.rsvp{font-size:15px;font-weight:700;opacity:.85;margin-top:10px}
+</style>
+
+<!-- ===== Editor styles ===== -->
+<style id="editor-css">
+body{margin:0;min-height:100vh;font-family:'Heebo',sans-serif;color:#333;background:linear-gradient(135deg,#FFF9C4 0%,#FFECB3 30%,#FFF3E0 60%,#E8F5E9 100%)}
+.top{padding:22px 16px 6px;text-align:center}
+.top h1{margin:0;font:900 30px 'Rubik',sans-serif}
+.top p{margin:6px 0 0;color:#666}
+.layout{display:grid;gap:24px;max-width:1100px;margin:0 auto;padding:16px;grid-template-columns:1fr}
+@media(min-width:900px){.layout{grid-template-columns:1fr 400px;align-items:start}}
+.panel{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.panel h2,.preview-col h2{margin:0 0 14px;font:800 20px 'Rubik',sans-serif}
+.preview-col h2{text-align:center}
+.field{display:block;margin-bottom:14px;font-weight:500;font-size:15px}
+.field input[type=text],.field input[type=number],.field input[type=date],.field input[type=time],.field input[type=tel],.field textarea{display:block;width:100%;margin-top:6px;padding:11px 12px;border:2px solid #e0e0e0;border-radius:12px;font:inherit;font-size:16px;background:#fffdf5}
+.field textarea{min-height:70px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:#FF9800}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.file-row{display:flex;align-items:center;gap:14px;margin-top:6px}
+.thumb{flex:0 0 84px;width:84px;height:84px;border-radius:50%;border:3px dashed #FF9800;background:#FFF9C4 center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:30px}
+.fieldset{border:0;padding:0;margin:0 0 16px}
+.fieldset legend{font-weight:500;font-size:15px;margin-bottom:8px;padding:0}
+.themes{display:flex;flex-wrap:wrap;gap:10px}
+.themes label{position:relative;cursor:pointer}
+.themes input{position:absolute;opacity:0;pointer-events:none}
+.sw{display:flex;align-items:center;gap:8px;border:2px solid #e0e0e0;border-radius:14px;padding:8px 12px;font-weight:700;font-size:15px;background:#fff}
+.sw i{width:22px;height:22px;border-radius:50%;display:inline-block}
+.themes input:checked+.sw{border-color:#FF9800;box-shadow:0 0 0 3px #FFE0B2}
+.radio{display:inline-flex;align-items:center;gap:6px;margin-left:16px;font-weight:500;font-size:15px}
+.music-file{margin-top:10px;font-size:14px}
+.phone{width:100%;max-width:380px;margin:0 auto;border-radius:34px;overflow:hidden;border:10px solid #222;box-shadow:0 18px 40px rgba(0,0,0,.25);background:#fff}
+.phone .inv{min-height:680px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.btn{font:700 17px 'Heebo',sans-serif;border:0;border-radius:14px;padding:13px 20px;background:#FF9800;color:#fff;cursor:pointer;box-shadow:0 4px 0 #E68900}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.ghost{background:#fff;color:#333;border:2px solid #ddd;box-shadow:0 4px 0 #ddd}
+.hint{font-size:14px;color:#666;text-align:center;margin:12px 0 0;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>🎉 מחולל הזמנות דיגיטליות ליום הולדת</h1>
+  <p>העלו תמונה, מלאו את הפרטים, בחרו עיצוב ומוזיקה — וקבלו הזמנה מוכנה לשליחה</p>
+</header>
+
+<main class="layout">
+  <section class="panel">
+    <h2>פרטי ההזמנה</h2>
+    <form id="form" autocomplete="off" onsubmit="return false">
+
+      <div class="field">
+        <span>תמונה של החוגג/ת</span>
+        <div class="file-row">
+          <div id="photo-thumb" class="thumb">🖼️</div>
+          <input type="file" id="photo" accept="image/*">
+        </div>
+      </div>
+
+      <label class="field">שם החוגג/ת *
+        <input type="text" id="name" maxlength="30" value="רפאל" required>
+      </label>
+
+      <div class="row">
+        <label class="field">גיל
+          <input type="number" id="age" min="0" max="120" value="5">
+        </label>
+        <label class="field">כותרת משנה
+          <input type="text" id="subtitle" maxlength="40" value="חוגג יום הולדת">
+        </label>
+      </div>
+
+      <div class="row">
+        <label class="field">תאריך
+          <input type="date" id="date" value="2026-10-08">
+        </label>
+        <label class="field">שעה
+          <input type="time" id="time" value="17:30">
+        </label>
+      </div>
+
+      <label class="field">מקום
+        <input type="text" id="place" maxlength="60" value="קסטרא חיפה">
+      </label>
+
+      <label class="field">הודעה
+        <textarea id="message" maxlength="200">אשמח לראותכם!</textarea>
+      </label>
+
+      <label class="field">טלפון לאישור הגעה (לא חובה)
+        <input type="tel" id="rsvp" maxlength="20" placeholder="050-0000000">
+      </label>
+
+      <fieldset class="fieldset">
+        <legend>עיצוב</legend>
+        <div id="themes" class="themes"></div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>מוזיקה</legend>
+        <label class="radio"><input type="radio" name="music" value="builtin" checked> מנגינת יום הולדת</label>
+        <label class="radio"><input type="radio" name="music" value="custom" id="music-custom"> קובץ מוזיקה משלי</label>
+        <input type="file" id="music-file" class="music-file" accept="audio/*">
+      </fieldset>
+    </form>
+  </section>
+
+  <section class="preview-col">
+    <h2>תצוגה מקדימה</h2>
+    <div class="phone"><div id="stage"></div></div>
+    <div class="actions">
+      <button type="button" id="replay" class="btn ghost">הציגו שוב את מסך הפתיחה</button>
+      <button type="button" id="export" class="btn">⬇️ הורידו את ההזמנה</button>
+    </div>
+    <p class="hint">
+      ההזמנה שיורדת היא קובץ HTML עצמאי (כולל התמונה והמוזיקה).<br>
+      אפשר לשלוח אותו בוואטסאפ או במייל, והוא ייפתח בכל דפדפן, גם בטלפון.
+    </p>
+  </section>
+</main>
+
+<!-- ===== Invitation renderer (shared by the preview and the downloaded file) ===== -->
+<script id="invite-lib">
+const THEMES = {
+  adventure: { label: 'הרפתקה',     bg1: '#2a9df4', bg2: '#1565c0', card: '#fff8d6', accent: '#e53935', ink: '#0d2b5e',
+               emojis: ['⭐', '⚡', '🔥', '✨'], confetti: ['#FFD600', '#E53935', '#FFFFFF', '#4CAF50', '#2196F3'] },
+  balloons:  { label: 'בלונים',     bg1: '#fff1f6', bg2: '#e0f7fa', card: '#ffffff', accent: '#ff5c8a', ink: '#4a2350',
+               emojis: ['🎈', '🎈', '🎉', '🎀'], confetti: ['#ff5c8a', '#7fd8f0', '#ffe066', '#b39ddb'] },
+  princess:  { label: 'נסיכה',      bg1: '#f3e5f5', bg2: '#fce4ec', card: '#fffafd', accent: '#ab47bc', ink: '#3b1d4a',
+               emojis: ['👑', '✨', '💖', '🌟'], confetti: ['#ab47bc', '#f48fb1', '#ffd54f', '#ffffff'] },
+  dinos:     { label: 'דינוזאורים', bg1: '#e8f5e9', bg2: '#c5e1a5', card: '#fffde7', accent: '#2e7d32', ink: '#1b3a1f',
+               emojis: ['🦖', '🌿', '🦕', '🌋'], confetti: ['#43a047', '#fdd835', '#8d6e63', '#26a69a'] }
+};
+
+// Birthday tune in C major (quarter-note beats); [note, beats]
+const BIRTHDAY_TUNE = [
+  ['G4', .5], ['G4', .5], ['A4', 1], ['G4', 1], ['C5', 1], ['B4', 2],
+  ['G4', .5], ['G4', .5], ['A4', 1], ['G4', 1], ['D5', 1], ['C5', 2],
+  ['G4', .5], ['G4', .5], ['G5', 1], ['E5', 1], ['C5', 1], ['B4', 1], ['A4', 2],
+  ['F5', .5], ['F5', .5], ['E5', 1], ['C5', 1], ['D5', 1], ['C5', 2]
+];
+const NOTE_HZ = { G4: 392, A4: 440, B4: 493.88, C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99 };
+
+let currentPlayer = null;
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+}
+
+function rnd(a, b) { return a + Math.random() * (b - a); }
+
+function fmtDate(v) {
+  const [y, m, d] = String(v).split('-').map(Number);
+  if (!y || !m || !d) return '';
+  return new Date(y, m - 1, d).toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function decoHTML(t) {
+  let s = '';
+  for (let i = 0; i < 12; i++) {
+    s += `<span style="--x:${rnd(0, 94).toFixed(1)}%;--s:${rnd(26, 42).toFixed(0)}px;--d:${rnd(10, 18).toFixed(1)}s;--t:-${rnd(0, 16).toFixed(1)}s;--r:${rnd(-25, 25).toFixed(0)}deg">${t.emojis[i % t.emojis.length]}</span>`;
+  }
+  return s;
+}
+
+function confettiHTML(t) {
+  let s = '';
+  for (let i = 0; i < 50; i++) {
+    s += `<span style="--x:${rnd(0, 100).toFixed(1)}%;--d:${rnd(3.5, 7).toFixed(1)}s;--t:-${rnd(0, 7).toFixed(1)}s;--c:${t.confetti[i % t.confetti.length]}"></span>`;
+  }
+  return s;
+}
+
+// Returns a player with play() / stop() / playing. Uses a custom audio file if given, otherwise a synthesized tune.
+function createPlayer(music, onState = () => {}) {
+  if (music && music.type === 'custom' && music.src) {
+    const a = new Audio(music.src);
+    a.loop = true;
+    a.onplay = () => onState(true);
+    a.onpause = () => onState(false);
+    return {
+      play() { a.play().catch(() => onState(false)); },
+      stop() { a.pause(); },
+      get playing() { return !a.paused; }
+    };
+  }
+
+  let ctx = null, master = null, timer = null, playing = false, nodes = [];
+  const BEAT = 0.6; // seconds per beat (~100 BPM)
+
+  const tone = (hz, start, dur) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'triangle';
+    o.frequency.value = hz;
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(0.4, start + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur * 0.95);
+    o.connect(g).connect(master);
+    o.start(start);
+    o.stop(start + dur);
+    o.stopAt = start + dur;
+    nodes.push(o);
+  };
+
+  // Schedules one full pass of the tune from startAt, and queues the next pass 2s before it ends.
+  const loop = startAt => {
+    if (!playing) return;
+    nodes = nodes.filter(n => n.stopAt > ctx.currentTime);
+    let t = startAt;
+    for (const [note, beats] of BIRTHDAY_TUNE) {
+      tone(NOTE_HZ[note], t, beats * BEAT);
+      t += beats * BEAT;
+    }
+    timer = setTimeout(() => loop(t), Math.max(0, (t - ctx.currentTime - 2) * 1000));
+  };
+
+  return {
+    play() {
+      if (playing || !(window.AudioContext || window.webkitAudioContext)) return;
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      if (!master) {
+        master = ctx.createGain();
+        master.gain.value = 0.5;
+        master.connect(ctx.destination);
+      }
+      ctx.resume();
+      playing = true;
+      onState(true);
+      loop(ctx.currentTime + 0.05);
+    },
+    stop() {
+      playing = false;
+      clearTimeout(timer);
+      nodes.forEach(n => { try { n.stop(); } catch (e) {} });
+      nodes = [];
+      onState(false);
+    },
+    get playing() { return playing; }
+  };
+}
+
+function stopCurrentMusic() {
+  if (currentPlayer) currentPlayer.stop();
+  currentPlayer = null;
+}
+
+// cfg: { name, age, subtitle, date, time, place, message, rsvp, theme, photo (dataURL|null), music: {type:'builtin'} | {type:'custom', src} }
+// opts: { open: bool (skip cover), onOpen: fn }
+function renderInvite(root, cfg, opts = {}) {
+  stopCurrentMusic();
+  const key = THEMES[cfg.theme] ? cfg.theme : 'adventure';
+  const t = THEMES[key];
+  const vars = `--bg1:${t.bg1};--bg2:${t.bg2};--card:${t.card};--accent:${t.accent};--ink:${t.ink}`;
+  const photo = cfg.photo ? `<img class="photo" src="${cfg.photo}" alt="">` : `<div class="photo photo-ph">🎂</div>`;
+  const items = [];
+  if (cfg.date) items.push(['📅', fmtDate(cfg.date)]);
+  if (cfg.time) items.push(['🕒', cfg.time]);
+  if (cfg.place) items.push(['📍', cfg.place]);
+
+  root.innerHTML = `
+    <div class="inv theme-${key}${opts.open ? ' opened' : ''}" dir="rtl" style="${vars}">
+      <div class="deco">${decoHTML(t)}</div>
+      <div class="confetti">${confettiHTML(t)}</div>
+      <button class="music-btn off" type="button" title="מוזיקה">🎵</button>
+      <div class="cover${opts.open ? ' hide' : ''}">
+        ${photo}
+        <h2>הזמנה ליום ההולדת של ${esc(cfg.name)}</h2>
+        <button class="open-btn" type="button">פתחו את ההזמנה 🎉</button>
+      </div>
+      <div class="wrap">
+        <div class="card">
+          ${photo}
+          <div class="subtitle">${esc(cfg.subtitle)}</div>
+          <div class="name">${esc(cfg.name)}</div>
+          ${cfg.age !== '' && cfg.age != null ? `<div class="age">${esc(cfg.age)}</div><div class="age-label">${cfg.age == 1 ? 'שנה!' : 'שנים!'}</div>` : ''}
+          ${items.length ? `<ul class="details">${items.map(([i, v]) => `<li><span class="ic">${i}</span><span>${esc(v)}</span></li>`).join('')}</ul>` : ''}
+          ${cfg.message ? `<p class="message">${esc(cfg.message)}</p>` : ''}
+          ${cfg.rsvp ? `<div class="rsvp">לאישור הגעה: ${esc(cfg.rsvp)}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+
+  const inv = root.querySelector('.inv');
+  const cover = inv.querySelector('.cover');
+  const musicBtn = inv.querySelector('.music-btn');
+  const player = createPlayer(cfg.music, on => musicBtn.classList.toggle('off', !on));
+  currentPlayer = player;
+
+  musicBtn.onclick = () => (player.playing ? player.stop() : player.play());
+  inv.querySelector('.open-btn').onclick = () => {
+    inv.classList.add('opened');
+    cover.classList.add('hide');
+    if (opts.onOpen) opts.onOpen();
+    player.play();
+  };
+}
+
+function safeJson(obj) {
+  return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
+</script>
+
+<!-- ===== Editor logic ===== -->
+<script>
+const $ = id => document.getElementById(id);
+
+let photoData = null;   // compressed JPEG data URL
+let musicData = null;   // uploaded audio data URL
+let opened = false;     // whether the preview cover was already opened
+let queueTimer = null;
+
+function readForm() {
+  const useCustomMusic = $('music-custom').checked && musicData;
+  return {
+    name: $('name').value.trim(),
+    age: $('age').value.trim(),
+    subtitle: $('subtitle').value.trim(),
+    date: $('date').value,
+    time: $('time').value,
+    place: $('place').value.trim(),
+    message: $('message').value.trim(),
+    rsvp: $('rsvp').value.trim(),
+    theme: document.querySelector('input[name="theme"]:checked').value,
+    photo: photoData,
+    music: useCustomMusic ? { type: 'custom', src: musicData } : { type: 'builtin' }
+  };
+}
+
+function refresh() {
+  renderInvite($('stage'), readForm(), { open: opened, onOpen: () => { opened = true; } });
+}
+
+function queueRefresh() {
+  clearTimeout(queueTimer);
+  queueTimer = setTimeout(refresh, 150);
+}
+
+// Shrinks the photo so the downloaded file stays light.
+function compressImage(file, maxSide = 1000) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const s = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * s);
+      c.height = Math.round(img.height * s);
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff';            // avoids black background for transparent PNGs
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', 0.88));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('bad image')); };
+    img.src = url;
+  });
+}
+
+function setThumb() {
+  const thumb = $('photo-thumb');
+  thumb.style.backgroundImage = photoData ? `url("${photoData}")` : '';
+  thumb.textContent = photoData ? '' : '🖼️';
+}
+
+// Theme picker
+$('themes').innerHTML = Object.entries(THEMES).map(([key, t], i) =>
+  `<label><input type="radio" name="theme" value="${key}"${i === 0 ? ' checked' : ''}>` +
+  `<span class="sw"><i style="background:linear-gradient(135deg,${t.bg1},${t.accent})"></i>${t.label}</span></label>`
+).join('');
+
+$('form').addEventListener('input', queueRefresh);
+$('form').addEventListener('change', refresh);
+
+$('photo').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  photoData = null;
+  if (file) {
+    try {
+      photoData = await compressImage(file);
+    } catch (err) {
+      alert('לא הצלחנו לקרוא את התמונה, נסו קובץ אחר');
+    }
+  }
+  setThumb();
+  refresh();
+});
+
+$('music-file').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 6 * 1024 * 1024) {
+    alert('קובץ המוזיקה גדול מדי (עד 6MB)');
+    e.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    musicData = reader.result;
+    $('music-custom').checked = true;
+    refresh();
+  };
+  reader.readAsDataURL(file);
+});
+
+$('replay').addEventListener('click', () => {
+  opened = false;
+  refresh();
+});
+
+$('export').addEventListener('click', () => {
+  const cfg = readForm();
+  if (!cfg.name) {
+    alert('נא להזין את שם החוגג/ת');
+    $('name').focus();
+    return;
+  }
+  const css = $('invite-css').textContent;
+  const lib = $('invite-lib').textContent;
+  const doc = `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הזמנה ליום הולדת - ${esc(cfg.name)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Rubik:wght@500;700;900&display=swap" rel="stylesheet">
+<style>${css}</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>${lib}<\/script>
+<script>renderInvite(document.getElementById('stage'), ${safeJson(cfg)});<\/script>
+</body>
+</html>`;
+  const url = URL.createObjectURL(new Blob([doc], { type: 'text/html;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `הזמנה-${cfg.name}.html`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+setThumb();
+refresh();
+</script>
+</body>
+</html>
